@@ -1,0 +1,33 @@
+language: java
+git:
+  depth: false
+branches:
+  except:
+    - /^v[0-9]/
+  only:
+    - master
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_e0eab208aa27_key -iv $encrypted_e0eab208aa27_iv -in github_deploy_key.enc -out github_deploy_key -d
+  - chmod 600 github_deploy_key
+  - eval $(ssh-agent -s)
+  - ssh-add github_deploy_key
+  - git config --global user.email "builds@travis-ci.com"
+  - git config --global user.name "Travis CI"
+  - sudo easy_install pip
+  - pip install shyaml --user
+  - source ./build-scripts/prepare_environment.sh
+  - npm install -g redoc-cli
+  - npm install speccy -g
+
+script:
+  - ./openapi-generator.sh validate -i openapi.yml
+  - speccy lint openapi.yml
+  - ./build-scripts/dart.sh
+  - ./build-scripts/redoc.sh
+ 
+after_success:
+  - export GIT_TAG=v$API_VERSION
+  - git commit -m "[skip travis] Generated SDK version v$API_VERSION from TravisCI for build $TRAVIS_BUILD_NUMBER"
+  - git tag $GIT_TAG -a -m "Generated tag from TravisCI for build $TRAVIS_BUILD_NUMBER"
+  - git push -q --follow-tags git@github.com:stevenallen05/hackathon-api.git HEAD:master
