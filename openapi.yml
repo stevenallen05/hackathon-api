@@ -1162,10 +1162,7 @@ paths:
         parameters:
             -
                 name: userId
-                description: |-
-                    The user ID, represented as a string.
-
-                    `"current"` can be used as a shortcut for the currently-authenticated user
+                description: The user's email address
                 schema:
                     type: string
                 in: path
@@ -1553,6 +1550,7 @@ paths:
         parameters:
             -
                 name: userId
+                description: The user's email address
                 schema:
                     type: string
                 in: path
@@ -1769,8 +1767,9 @@ paths:
         parameters:
             -
                 name: inviteId
+                description: The Invitation ID
                 schema:
-                    type: string
+                    type: integer
                 in: path
                 required: true
 components:
