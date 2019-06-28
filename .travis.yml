@@ -8,7 +8,7 @@ branches:
     - master
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_e0eab208aa27_key -iv $encrypted_e0eab208aa27_iv -in github_deploy_key.enc -out github_deploy_key -d
+  - openssl aes-256-cbc -K $encrypted_57990e62f972_key -iv $encrypted_57990e62f972_iv -in github_deploy_key.enc -out github_deploy_key -d
   - chmod 600 github_deploy_key
   - eval $(ssh-agent -s)
   - ssh-add github_deploy_key
